@@ -5,6 +5,8 @@ This is a backend application built with NestJS that leverages the power of Goog
 ## Features
 
 - **Orthography and Grammar Correction**: An endpoint that takes a text prompt and returns corrections, a user score, and a message.
+- **Pros and Cons Discussion**: An endpoint that provides a balanced discussion of the pros and cons of a given topic.
+- **Pros and Cons Discussion (Streaming)**: A streaming version of the pros and cons discussion endpoint.
 
 ## Getting Started
 
@@ -53,7 +55,7 @@ The API will be available at `http://localhost:3000`.
 
 ### AI Module
 
-#### `POST /ai/orthography`
+#### `POST /ai/orthography-check`
 
 Checks the spelling and grammar of the provided text.
 
@@ -78,3 +80,39 @@ Checks the spelling and grammar of the provided text.
   "message": "Excellent! You've done a great job, but there are a few things to improve."
 }
 ```
+
+---
+
+#### `POST /ai/pros-cons-discusser`
+
+Provides a balanced discussion of the pros and cons for a given topic.
+
+**Request Body:**
+
+```json
+{
+  "prompt": "Should I learn React or Angular?"
+}
+```
+
+**Successful Response (`200 OK`):**
+
+The response will be a string containing the discussion.
+
+---
+
+#### `POST /ai/pros-cons-discusser-stream`
+
+Provides a streaming response for a pros and cons discussion. This is useful for long-running requests.
+
+**Request Body:**
+
+```json
+{
+  "prompt": "What are the pros and cons of remote work?"
+}
+```
+
+**Successful Response (`200 OK`):**
+
+The response is a stream of text chunks.
