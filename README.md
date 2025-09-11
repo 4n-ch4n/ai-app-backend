@@ -7,6 +7,7 @@ This is a backend application built with NestJS that leverages the power of Goog
 - **Orthography and Grammar Correction**: An endpoint that takes a text prompt and returns corrections, a user score, and a message.
 - **Pros and Cons Discussion**: An endpoint that provides a balanced discussion of the pros and cons of a given topic.
 - **Pros and Cons Discussion (Streaming)**: A streaming version of the pros and cons discussion endpoint.
+- **Translation**: An endpoint that translates text from one language to another.
 
 ## Getting Started
 
@@ -116,3 +117,26 @@ Provides a streaming response for a pros and cons discussion. This is useful for
 **Successful Response (`200 OK`):**
 
 The response is a stream of text chunks.
+
+---
+
+#### `POST /ai/translate`
+
+Translates text to a specified language.
+
+**Request Body:**
+
+```json
+{
+  "prompt": "Hello world",
+  "lang": "French"
+}
+```
+
+**Successful Response (`200 OK`):**
+
+```json
+{
+    "message": "Bonjour le monde"
+}
+```

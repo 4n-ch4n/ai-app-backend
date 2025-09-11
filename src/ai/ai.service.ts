@@ -4,8 +4,9 @@ import {
   orthographyCheckUseCase,
   prosConsDicusserUseCase,
   prosConsStreamUseCase,
+  translateUseCase,
 } from './use-cases';
-import { OrthoGraphyDTO, ProsConsDiscusserDTO } from './dtos';
+import { OrthoGraphyDTO, ProsConsDiscusserDTO, TranslateDTO } from './dtos';
 
 @Injectable()
 export class AiService {
@@ -26,6 +27,13 @@ export class AiService {
   async prosConsDicusserStream(prosconsDiscusserDTO: ProsConsDiscusserDTO) {
     return await prosConsStreamUseCase(this.genAI, {
       prompt: prosconsDiscusserDTO.prompt,
+    });
+  }
+
+  async translate(translateDTO: TranslateDTO) {
+    return await translateUseCase(this.genAI, {
+      prompt: translateDTO.prompt,
+      lang: translateDTO.lang,
     });
   }
 }

@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { AiService } from './ai.service';
-import { OrthoGraphyDTO, ProsConsDiscusserDTO } from './dtos';
+import { OrthoGraphyDTO, ProsConsDiscusserDTO, TranslateDTO } from './dtos';
 
 @Controller('ai')
 export class AiController {
@@ -33,5 +33,10 @@ export class AiController {
     }
 
     res.end();
+  }
+
+  @Post('translate')
+  translate(@Body() translateDTO: TranslateDTO) {
+    return this.aiService.translate(translateDTO);
   }
 }
