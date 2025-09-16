@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { GoogleGenAI } from '@google/genai';
 import {
+  audioToTextUseCase,
   orthographyCheckUseCase,
   prosConsDicusserUseCase,
   prosConsStreamUseCase,
@@ -14,6 +15,7 @@ import {
   TranslateDTO,
 } from './dtos';
 import { S3Service } from '../s3/s3.service';
+import { AudioToTextDTO } from './dtos/audio-to-text.dto';
 
 @Injectable()
 export class AiService {
@@ -56,5 +58,17 @@ export class AiService {
 
   async textToAudioGetter(fileId: string) {
     return await this.s3Service.getAudio(fileId);
+  }
+
+  async audioToText(
+    audioFile: Express.Multer.File,
+    audioToTextDTO: AudioToTextDTO,
+  ) {
+    const { prompt } = audioToTextDTO;
+
+    return await audioToTextUseCase(this.genAI, {
+      audioFile,
+      prompt,
+    });
   }
 }

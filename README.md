@@ -9,6 +9,7 @@ This is a backend application built with NestJS that leverages the power of Goog
 - **Pros and Cons Discussion (Streaming)**: A streaming version of the pros and cons discussion endpoint.
 - **Translation**: An endpoint that translates text from one language to another.
 - **Text-to-Audio Generation**: An endpoint that converts text into an audio file and saves it to cloud storage.
+- **Audio-to-Text Conversion**: An endpoint that transcribes audio files into text.
 
 ## Getting Started
 
@@ -178,4 +179,37 @@ Retrieves a previously generated audio file.
 **URL Parameters:**
 
 - `fileId` (string, required): The ID of the audio file to retrieve (e.g., `1715887872123.wav`).
+
+---
+
+#### `POST /ai/audio-to-text`
+
+Transcribes the given audio file into text.
+
+**Request Body:**
+
+This endpoint uses `multipart/form-data`.
+
+- `file`: The audio file to transcribe.
+- `prompt` (optional): A text prompt to guide the transcription.
+
+**Successful Response (`201 Created`):**
+
+```json
+{
+  "task": "transcribe",
+  "language": "english",
+  "duration": 5.2,
+  "text": "Hello, this is a test of the audio to text service.",
+  "segments": [
+    {
+      "id": 0,
+      "seek": 0,
+      "start": 0.0,
+      "end": 5.2,
+      "text": "Hello, this is a test of the audio to text service."
+    }
+  ]
+}
+```
 

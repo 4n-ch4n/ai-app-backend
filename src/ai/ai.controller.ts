@@ -2,14 +2,21 @@ import { Response } from 'express';
 import {
   Body,
   Controller,
+  FileTypeValidator,
   Get,
   HttpStatus,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Post,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AiService } from './ai.service';
 import {
+  AudioToTextDTO,
   OrthoGraphyDTO,
   ProsConsDiscusserDTO,
   TextToAudioDTO,
@@ -61,5 +68,25 @@ export class AiController {
   @Get('text-to-audio/:fileId')
   textToAudioGetter(@Param('fileId') fileId: string) {
     return this.aiService.textToAudioGetter(fileId);
+  }
+
+  @Post('audio-to-text')
+  @UseInterceptors(FileInterceptor('file'))
+  audioToText(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 1000 * 1024 * 5,
+            message: 'File is bigger than 5 mb',
+          }),
+          new FileTypeValidator({ fileType: 'audio/*' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+    @Body() audioToTextDTO: AudioToTextDTO,
+  ) {
+    return this.aiService.audioToText(file, audioToTextDTO);
   }
 }
