@@ -8,6 +8,7 @@ This is a backend application built with NestJS that leverages the power of Goog
 - **Pros and Cons Discussion**: An endpoint that provides a balanced discussion of the pros and cons of a given topic.
 - **Pros and Cons Discussion (Streaming)**: A streaming version of the pros and cons discussion endpoint.
 - **Translation**: An endpoint that translates text from one language to another.
+- **Text-to-Audio Generation**: An endpoint that converts text into an audio file and saves it to cloud storage.
 
 ## Getting Started
 
@@ -30,13 +31,18 @@ These instructions will get you a copy of the project up and running on your loc
 
 3.  **Set up environment variables**
 
-    Create a `.env` file in the root of the project and add your Google API Key:
+    Copy the `.env.template` file in the root of the project and add your environment variables:
 
-    ```env
-    GOOGLE_API_KEY=YOUR_GOOGLE_API_KEY
-    ```
+```env
+GOOGLE_API_KEY=YOUR_GOOGLE_API_KEY
 
-### Running the Application
+SPACE_REGION=YOUR_S3_REGION
+SPACE_URL=YOUR_S3_URL
+SPACE_ACCESS_KEY=YOUR_S3_ACCESS_KEY
+SPACE_SECRET_KEY=YOUR_S3_SECRET_KEY
+SPACE_BUCKET=YOUR_S3_BUCKET_NAME
+SPACE_CDN_URL=YOUR_S3_CDN_URL 
+```### Running the Application
 
 -   **Development mode**
     ```bash
@@ -140,3 +146,36 @@ Translates text to a specified language.
     "message": "Bonjour le monde"
 }
 ```
+
+---
+
+#### `POST /ai/text-to-audio`
+
+Converts the given text into an audio file and returns the URL to access it.
+
+**Request Body:**
+
+```json
+{
+  "prompt": "Hello, this is a test of the text-to-audio service.",
+  "voice": "echo"
+}
+```
+*Note: The `voice` property is optional*
+
+**Successful Response (`200 OK`):**
+
+```
+  https://d3fgeazrn9lle8.cloudfront.net/audios/1757983742592.wav
+```
+
+---
+
+#### `GET /ai/text-to-audio/:fileId`
+
+Retrieves a previously generated audio file.
+
+**URL Parameters:**
+
+- `fileId` (string, required): The ID of the audio file to retrieve (e.g., `1715887872123.wav`).
+

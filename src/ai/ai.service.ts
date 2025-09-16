@@ -4,12 +4,21 @@ import {
   orthographyCheckUseCase,
   prosConsDicusserUseCase,
   prosConsStreamUseCase,
+  textToAudioUseCase,
   translateUseCase,
 } from './use-cases';
-import { OrthoGraphyDTO, ProsConsDiscusserDTO, TranslateDTO } from './dtos';
+import {
+  OrthoGraphyDTO,
+  ProsConsDiscusserDTO,
+  TextToAudioDTO,
+  TranslateDTO,
+} from './dtos';
+import { S3Service } from '../s3/s3.service';
 
 @Injectable()
 export class AiService {
+  constructor(private readonly s3Service: S3Service) {}
+
   private genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
   async orthographyCheck(orthoGraphyDTO: OrthoGraphyDTO) {
@@ -35,5 +44,17 @@ export class AiService {
       prompt: translateDTO.prompt,
       lang: translateDTO.lang,
     });
+  }
+
+  async texToAudio(textToAudioDTO: TextToAudioDTO) {
+    return await textToAudioUseCase(this.genAI, {
+      filesService: this.s3Service,
+      prompt: textToAudioDTO.prompt,
+      voice: textToAudioDTO.voice,
+    });
+  }
+
+  async textToAudioGetter(fileId: string) {
+    return await this.s3Service.getAudio(fileId);
   }
 }

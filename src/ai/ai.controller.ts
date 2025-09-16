@@ -1,7 +1,20 @@
 import { Response } from 'express';
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { AiService } from './ai.service';
-import { OrthoGraphyDTO, ProsConsDiscusserDTO, TranslateDTO } from './dtos';
+import {
+  OrthoGraphyDTO,
+  ProsConsDiscusserDTO,
+  TextToAudioDTO,
+  TranslateDTO,
+} from './dtos';
 
 @Controller('ai')
 export class AiController {
@@ -38,5 +51,15 @@ export class AiController {
   @Post('translate')
   translate(@Body() translateDTO: TranslateDTO) {
     return this.aiService.translate(translateDTO);
+  }
+
+  @Post('text-to-audio')
+  textToAudio(@Body() textToAudioDTO: TextToAudioDTO) {
+    return this.aiService.texToAudio(textToAudioDTO);
+  }
+
+  @Get('text-to-audio/:fileId')
+  textToAudioGetter(@Param('fileId') fileId: string) {
+    return this.aiService.textToAudioGetter(fileId);
   }
 }
